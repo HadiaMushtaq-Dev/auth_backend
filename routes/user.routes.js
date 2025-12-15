@@ -3,7 +3,7 @@ const jwt=require("jsonwebtoken")
 const {body,validationResult}=require('express-validator')
 const bcrypt=require('bcrypt')
 const router=express.Router()
-const model=require('../Model/user.model')
+const User=require('../Model/user.model')
 
 router.get('/test', (req, res) => {
   res.json({ message: "User route is working" });
