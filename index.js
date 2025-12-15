@@ -8,9 +8,23 @@ const cookieparser=require("cookie-parser")
 dotenv.config()
 app.use(express.json())
 
+const allowedOrigins = [
+  "http://localhost:5173",                     // local dev
+  "https://auth-frontend-sigma-steel.vercel.app"  // deployed frontend
+];
+
 app.use(cors({
-  origin: "http://auth-frontend-sigma-steel.vercel.app", 
-  credentials: true               
+  origin: function(origin, callback){
+    // allow requests with no origin (like Postman)
+    if(!origin) return callback(null, true);
+
+    if(allowedOrigins.indexOf(origin) === -1){
+      const msg = 'CORS not allowed for this origin';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
 }));
 app.use(express.urlencoded({extended:true}))
 connectToDb()
